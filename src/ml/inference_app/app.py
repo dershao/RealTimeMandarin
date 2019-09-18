@@ -2,36 +2,52 @@ import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 # tensorflow raises warnings when using with numpy version > 1.16
 
-from flask import Flask
+from flask import Flask, request, jsonify
 import tensorflow as tf
+import numpy as np
+import logging
 
 app = Flask(__name__)
 
-
-class Model:
-    def __init__(self, file):
-        self.model = tf.keras.models.load_model(file)
-
-    def classify(self, img):
-        return self.model.predict(img)
-
-
-model = Model("../models/mnist-keras.h5")
-
-
-@app.route('/hello', methods=['GET'])
-def hello():
-
-    return "hey"
+# https://github.com/tensorflow/tensorflow/issues/14356
+class MlModel:
+    def __init__(self):
+        self.graph = tf.get_default_graph()
+        self.session = tf.Session()
+        self.model = None
+    
+    def load_model(self, file):
+        with self.graph.as_default():
+            with self.session.as_default():
+                try:
+                    self.model = tf.keras.models.load_model(file)
+                    logging.info("Successfully loaded model")
+                except Exception as e:
+                    logging.exception(e)
+    
+    def predict(self, img):
+        with self.graph.as_default():
+            with self.session.as_default():
+                preds = self.model.predict(img)
+                return np.argmax(preds)
 
 
 @app.route("/classify", methods=["POST"])
 def classify():
-    return 0
+    input_json = request.get_json(force=True)
+
+    img_grayscale = np.array(input_json['data']['attributes']['grayscale']).reshape(1, 28, 28, 1)
+    
+    global model
+    pred = model.predict(img_grayscale)
+
+    return jsonify(data=str(pred))
 
 
 if __name__  == "__main__":
-
+    global model
+    model = MlModel()
+    model.load_model("../models/mnist-keras.h5")
     app.run(debug=True)
 
 
