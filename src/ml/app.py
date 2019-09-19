@@ -47,7 +47,7 @@ def classify():
 if __name__  == "__main__":
     global model
     model = MlModel()
-    model.load_model("../models/mnist-keras.h5")
+    model.load_model("./models/mnist-keras.h5")
     app.run(debug=True)
 
 
