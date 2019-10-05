@@ -2,7 +2,7 @@ import asyncio
 import numpy as np
 import aiohttp
 from aiohttp import web
-from skimage.transform import resize
+import cv2
 
 ML_HOST = "http://ml-service/classify"
 
@@ -12,15 +12,16 @@ async def hello(request):
 
 async def resize_image(img_array, height=28, width=28):
 
-    img_array = img_array.reshape(500, 309, 4)[:, :, 3:].reshape(500, 309) / 255
+    img_array = img_array.reshape(256, 256, 4)
 
-    return resize(img_array, (height, width), anti_aliasing=False)
+    return cv2.resize(img_array.astype('uint8'), (height, width), interpolation=cv2.INTER_AREA)
 
 async def send_classify_request(request):
     body = await request.json()
     data = body['data']['image']
 
     img = await resize_image(np.array(data))
+    img = img[:, :, 3:]
 
     async with aiohttp.ClientSession() as session:
         async with session.post('http://localhost:5000/classify', json={'data': {'attributes': {'grayscale': img.tolist() }}}) as resp:

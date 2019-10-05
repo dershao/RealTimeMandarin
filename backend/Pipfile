@@ -8,8 +8,8 @@ verify_ssl = true
 [packages]
 aiohttp = "*"
 numpy = "*"
-scikit-image = "*"
 scipy = "*"
+opencv-python = "*"
 
 [requires]
 python_version = "3.7"
