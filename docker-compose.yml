@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  rtd-ml:
+    build: ./ml
+    volumes:
+      - ./ml:/usr/src/app
+    ports: 
+      - "5000:5000"
+
+  rtd-backend:
+    build: ./backend
+    volumes:
+      - ./backend:/usr/src/app
+    ports: 
+      - "8080:8080"
+    depends_on:
+      - rtd-ml
+
+  rtd-ui:
+    build: ./rtd-ui
+    volumes:
+      - ./rtd-ui:/usr/src/app
+    ports: 
+      - "3000:3000"
+    depends_on:
+      - rtd-backend
