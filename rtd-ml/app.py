@@ -4,12 +4,13 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 import numpy as np
 import logging
 
 app = Flask(__name__)
 CORS(app)
+tf.disable_v2_behavior()
 
 # https://github.com/tensorflow/tensorflow/issues/14356
 class MlModel:
