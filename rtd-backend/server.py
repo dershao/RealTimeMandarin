@@ -10,21 +10,50 @@ ML_HOST = "http://localhost:5000/classify"
 
 
 async def hello(request):
+    """
+        Test endpoint
+    """
     return web.Response(text="Pong")
 
 
-async def resize_image(img_array, height=28, width=28, channels=4):
+async def resize_image(img_array, height=28, width=28):
+    """
+        Resize image with OpenCV library to height and width expected by ML service.
 
-    img_array = img_array.reshape(height, width, channels)
+        Args:
+            img_array: Array of pixel values
+            height: Desired height of image
+            width: Desire width of image
+        
+        Returns:
+            Array of pixel values with desired dimensions
+    """
 
     return cv2.resize(img_array.astype('uint8'), (height, width), interpolation=cv2.INTER_AREA)
 
 
 async def send_classify_request(request):
-    body = await request.json()
-    data = body['data']['attributes']['image']
+    """
+        Resize image and send to ML service for classification
+    """
 
-    img = await resize_image(np.array(data))
+    body = await request.json()
+    
+    # get the raw pixel values
+    data = np.array(body['data']['attributes']['image'])
+
+    # get the number of image channels
+    channels = body['data']['attributes']['channels'] 
+
+    # calculate the image dimensions (H * W * channels)
+    shape = data.shape[0] // channels
+    height = width = int(shape ** 0.5)
+
+    img_array = data.reshape(height, width, channels)
+
+    img = await resize_image(img_array)
+
+    # Currently, we are only concerned with grayscale values
     img = img[:, :, 3:]
 
     async with aiohttp.ClientSession() as session:
