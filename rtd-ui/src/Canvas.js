@@ -1,18 +1,25 @@
 import React from 'react';
 
 class Canvas extends React.Component {
+
+    CANVAS_HEIGHT = 256;
+    CANVAS_WIDTH = 256;
+
     render() {
         return (
-            <canvas ref="drawingBoard" width="256" height="256" border="thick solid #0000FF"></canvas>  
+            <canvas ref="drawingBoard" width={this.CANVAS_WIDTH} height={this.CANVAS_HEIGHT} border="thick solid #0000FF"/>
         );
     }
 
     componentDidMount() {
         const drawingBoard = this.refs.drawingBoard;
         const context = drawingBoard.getContext("2d");
-        var paint = false;
-        
-        var previous = null;
+        var paint = false; // if we are currently painting (i.e. user clicked on canvas)
+        var previous = null; // previous coordinate
+
+        // to prevent user from spamming draw and overwhelming server, set a global flag
+        // and timeout between each server request 
+        var drawCooldown = false;
 
         drawingBoard.addEventListener("mousedown", function(e) {
             
@@ -38,10 +45,38 @@ class Canvas extends React.Component {
         drawingBoard.addEventListener("mouseup", function(e) {
             paint = false;
             previous = null;
+
+            if (!drawCooldown) {
+                console.log("sending stuff");
+                drawCooldown = true;
+                
+                var xhr = new XMLHttpRequest();
+                var rawData = context.getImageData(0, 0, 256, 256);
+                var imgData = Array.from(rawData.data);
+                var body = {
+                    data: {
+                        type: "image",
+                        attributes: {
+                            image: imgData,
+                            channels: 4
+                        }
+                    }
+                };
+                xhr.open("POST", "http://localhost:8080/classify");
+                xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+                xhr.onload = function() {
+
+                    console.info(xhr.responseText);
+                };
+                xhr.send(JSON.stringify(body));
+
+                setTimeout(toggleDrawcoolDown, 2000);
+            }
         });
 
         drawingBoard.addEventListener("mouseleave", function(e) {
             paint = false;
+            previous = null;
         });
 
 
@@ -54,8 +89,12 @@ class Canvas extends React.Component {
 
             context.beginPath();
             context.moveTo(previous.pageX, previous.pageY);
-            context.lineTo(x, y)
+            context.lineTo(x, y);
             context.stroke();
+        }
+
+        function toggleDrawcoolDown() {
+            drawCooldown = !drawCooldown;
         }
         
         var Point = function(x, y) {
