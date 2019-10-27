@@ -10,6 +10,7 @@ aiohttp = "*"
 numpy = "*"
 scipy = "*"
 opencv-python = "*"
+aiohttp-cors = "*"
 
 [requires]
 python_version = "3.7"

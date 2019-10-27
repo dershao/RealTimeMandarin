@@ -3,11 +3,13 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 # tensorflow raises warnings when using with numpy version > 1.16
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import tensorflow as tf
 import numpy as np
 import logging
 
 app = Flask(__name__)
+CORS(app)
 
 # https://github.com/tensorflow/tensorflow/issues/14356
 class MlModel:
@@ -36,8 +38,8 @@ class MlModel:
 def classify():
     input_json = request.get_json(force=True)
 
-    img_grayscale = np.array(input_json['data']['attributes']['grayscale']).reshape(1, 28, 28, 1)
-    
+    img_grayscale = np.array(input_json['data']['attributes']['grayscale']).reshape(1, 28, 28, 1) / 255
+
     global model
     pred = model.predict(img_grayscale)
 
@@ -48,7 +50,7 @@ if __name__  == "__main__":
     global model
     model = MlModel()
     model.load_model("./models/mnist-keras.h5")
-    app.run(debug=True)
+    app.run()
 
 
 
