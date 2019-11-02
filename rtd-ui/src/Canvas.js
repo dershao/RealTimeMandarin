@@ -93,29 +93,7 @@ class Canvas extends React.Component {
         this.previous = null;
 
         if (!this.drawCooldown) {
-            this.drawCooldown = true;
-            
-            var xhr = new XMLHttpRequest();
-            var rawData = this.context.getImageData(0, 0, this.CANVAS_HEIGHT, this.CANVAS_WIDTH);
-            var imgData = Array.from(rawData.data);
-            var body = {
-                data: {
-                    type: "image",
-                    attributes: {
-                        image: imgData,
-                        channels: 4
-                    }
-                }
-            };
-            xhr.open("POST", "http://localhost:8080/classify");
-            xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
-            xhr.onload = function() {
-
-                console.info(xhr.responseText);
-            };
-            xhr.send(JSON.stringify(body));
-
-            setTimeout(this.toggleDrawcoolDown, 2000);
+            this.makeClassifyRequest();
         }
     }
 
@@ -178,30 +156,35 @@ class Canvas extends React.Component {
         this.previous = null;
 
         if (!this.drawCooldown) {
-            this.drawCooldown = true;
-            
-            var xhr = new XMLHttpRequest();
-            var rawData = this.context.getImageData(0, 0, this.CANVAS_HEIGHT, this.CANVAS_WIDTH);
-            var imgData = Array.from(rawData.data);
-            var body = {
-                data: {
-                    type: "image",
-                    attributes: {
-                        image: imgData,
-                        channels: 4
-                    }
-                }
-            };
-            xhr.open("POST", "http://localhost:8080/classify");
-            xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
-            xhr.onload = function() {
-
-                console.info(xhr.responseText);
-            };
-            xhr.send(JSON.stringify(body));
-
-            setTimeout(this.toggleDrawcoolDown, 2000);
+            this.makeClassifyRequest();
         }
+    }
+
+    makeClassifyRequest() {
+
+        this.drawCooldown = true;
+            
+        var xhr = new XMLHttpRequest();
+        var rawData = this.context.getImageData(0, 0, this.CANVAS_HEIGHT, this.CANVAS_WIDTH);
+        var imgData = Array.from(rawData.data);
+        var body = {
+            data: {
+                type: "image",
+                attributes: {
+                    image: imgData,
+                    channels: 4
+                }
+            }
+        };
+        xhr.open("POST", "http://localhost:8080/classify");
+        xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xhr.onload = function() {
+
+            console.info(xhr.responseText);
+        };
+        xhr.send(JSON.stringify(body));
+
+        setTimeout(this.toggleDrawcoolDown, 2000);
     }
 
     componentDidMount() {
