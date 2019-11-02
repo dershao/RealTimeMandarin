@@ -18,6 +18,9 @@ class Canvas extends React.Component {
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
         this.onMouseLeave = this.onMouseLeave.bind(this);
+        this.onTouchStart= this.onTouchStart.bind(this); 
+        this.onTouchMove= this.onTouchMove.bind(this);
+        this.onTouchEnd= this.onTouchEnd.bind(this);
         this.toggleDrawcoolDown = this.toggleDrawcoolDown.bind(this);
     }
 
@@ -138,6 +141,69 @@ class Canvas extends React.Component {
         this.previous = null;
     }
 
+    onTouchStart({ nativeEvent }) {
+        /**
+         * Touch leaves drawing canvas.
+         * 
+         */
+        var touchX = nativeEvent.targetTouches[0].clientX - 1;
+        var touchY = nativeEvent.targetTouches[0].clientY - 1;
+        
+        if (!this.previous) {
+            this.previous = this.Point(touchX, touchY)
+        }
+
+        this.paint = true;
+    }
+
+    onTouchMove({ nativeEvent }) {
+        /**
+         * Touch is drawing on canvas.
+         * 
+         */
+        if (this.paint) {
+            var touchX = nativeEvent.targetTouches[0].clientX - 1;
+            var touchY = nativeEvent.targetTouches[0].clientY - 1;
+            this.redraw(this.context, touchX, touchY);
+            this.previous = this.Point(touchX, touchY);
+        }
+    }
+
+    onTouchEnd({ nativeEvent }) {
+        /**
+         * Touch stops drawing on canvas.
+         * 
+         */
+        this.paint = false;
+        this.previous = null;
+
+        if (!this.drawCooldown) {
+            this.drawCooldown = true;
+            
+            var xhr = new XMLHttpRequest();
+            var rawData = this.context.getImageData(0, 0, this.CANVAS_HEIGHT, this.CANVAS_WIDTH);
+            var imgData = Array.from(rawData.data);
+            var body = {
+                data: {
+                    type: "image",
+                    attributes: {
+                        image: imgData,
+                        channels: 4
+                    }
+                }
+            };
+            xhr.open("POST", "http://localhost:8080/classify");
+            xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+            xhr.onload = function() {
+
+                console.info(xhr.responseText);
+            };
+            xhr.send(JSON.stringify(body));
+
+            setTimeout(this.toggleDrawcoolDown, 2000);
+        }
+    }
+
     componentDidMount() {
         this.canvas.width = this.CANVAS_WIDTH;
         this.canvas.height = this.CANVAS_HEIGHT;
@@ -151,7 +217,10 @@ class Canvas extends React.Component {
                 onMouseDown={this.onMouseDown}
                 onMouseLeave={this.onMouseLeave}
                 onMouseUp={this.onMouseUp}
-                onMouseMove={this.onMouseMove} 
+                onMouseMove={this.onMouseMove}
+                onTouchStart={this.onTouchStart} 
+                onTouchMove={this.onTouchMove}
+                onTouchEnd={this.onTouchEnd}
                 border="thick solid #0000FF"/>
         );
     }
