@@ -60,7 +60,7 @@ class Canvas extends React.Component {
         
         context.strokeStyle = "#000000";
         context.lineJoin = "round";
-        context.lineWidth = 5;
+        context.lineWidth = 10;
 
         context.beginPath();
         context.moveTo(this.previous.pageX, this.previous.pageY);
@@ -203,8 +203,7 @@ class Canvas extends React.Component {
                 onMouseMove={this.onMouseMove}
                 onTouchStart={this.onTouchStart} 
                 onTouchMove={this.onTouchMove}
-                onTouchEnd={this.onTouchEnd}
-                border="thick solid #0000FF"/>
+                onTouchEnd={this.onTouchEnd} />
         );
     }
 }
