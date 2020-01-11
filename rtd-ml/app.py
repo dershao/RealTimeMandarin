@@ -39,7 +39,7 @@ class MlModel:
 def classify():
     input_json = request.get_json(force=True)
 
-    img_grayscale = np.array(input_json['data']['attributes']['grayscale']).reshape(1, 28, 28, 1) / 255
+    img_grayscale = np.array(input_json['data']['attributes']['grayscale']).reshape(1, 128, 128, 1) / 255
 
     global model
     pred = model.predict(img_grayscale)
@@ -50,7 +50,7 @@ def classify():
 if __name__  == "__main__":
     global model
     model = MlModel()
-    model.load_model("./models/mnist-keras.h5")
+    model.load_model("./models/characters-ten-v1")
     app.run()
 
 

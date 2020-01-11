@@ -16,7 +16,7 @@ async def hello(request):
     return web.Response(text="Pong")
 
 
-async def resize_image(img_array, height=28, width=28):
+async def resize_image(img_array, height=128, width=128):
     """
         Resize image with OpenCV library to height and width expected by ML service.
 
