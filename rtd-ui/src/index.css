@@ -13,8 +13,14 @@ code {
 }
 
 canvas {
-  /* margin: auto; */
-  /* display: block;  */
   border: 1px solid black;
+}
+
+.Canvas {
+  display: flex;
+}
+
+.CanvasComponent {
+  margin-left: 5em;
 }
 
