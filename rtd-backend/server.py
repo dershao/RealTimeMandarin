@@ -8,6 +8,18 @@ import cv2
 
 ML_HOST = "http://localhost:5000/classify"
 
+def convert(rgb):
+    """
+        For some reason, the HTML canvas image data will have the colour white as value 0 
+        and black as value 255 which is different from the dataset.
+    """
+    if (rgb == 0):
+        return 255
+    else:
+        return 255 - rgb
+
+v_convert = np.vectorize(convert)
+
 
 async def hello(request):
     """
@@ -49,7 +61,7 @@ async def send_classify_request(request):
     shape = data.shape[0] // channels
     height = width = int(shape ** 0.5)
 
-    img_array = data.reshape(height, width, channels)
+    img_array = v_convert(data.reshape(height, width, channels))
 
     img = await resize_image(img_array)
 
