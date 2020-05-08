@@ -9,7 +9,7 @@ class NNCanvas extends React.Component {
         if (image) {
             canvas = (
                 <div height="128" width="128">
-                    <img src= {image}/>
+                    <img src= {image} alt={`No prediction found: ${image}`}/>
                 </div>
             );
         } 

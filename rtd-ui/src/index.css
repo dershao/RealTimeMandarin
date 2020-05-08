@@ -24,3 +24,7 @@ canvas {
   margin-left: 5em;
 }
 
+#drawingCanvas {
+  display: block;
+}
+

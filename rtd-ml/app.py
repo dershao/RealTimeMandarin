@@ -32,7 +32,9 @@ class MlModel:
         with self.graph.as_default():
             with self.session.as_default():
                 preds = self.model.predict(img)
-                return np.argmax(preds)
+                proba = self.model.predict_proba(img)
+                return (np.argmax(preds), proba[0])
+    
 
 
 @app.route("/classify", methods=["POST"])
@@ -44,13 +46,13 @@ def classify():
     global model
     pred = model.predict(img_grayscale)
 
-    return jsonify(data=str(pred))
+    return jsonify(data=str(pred[0]), proba=str(pred[1]))
 
 
 if __name__  == "__main__":
     global model
     model = MlModel()
-    model.load_model("./models/characters-ten-v1")
+    model.load_model("./models/characters-six-v1")
     app.run()
 
 

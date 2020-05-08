@@ -22,6 +22,8 @@ class DrawingCanvas extends React.Component {
         this.onTouchMove= this.onTouchMove.bind(this);
         this.onTouchEnd= this.onTouchEnd.bind(this);
         this.toggleDrawcoolDown = this.toggleDrawcoolDown.bind(this);
+        this.onSubmitClick = this.onSubmitClick.bind(this);
+        this.onClearClick = this.onClearClick.bind(this);    
     }
 
     Point = function(x, y) {
@@ -57,7 +59,6 @@ class DrawingCanvas extends React.Component {
          * 
          */
 
-        //context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
         
         context.strokeStyle = "#000000";
         context.lineJoin = "round";
@@ -94,9 +95,9 @@ class DrawingCanvas extends React.Component {
         this.paint = false;
         this.previous = null;
 
-        if (!this.drawCooldown) {
-            this.makeClassifyRequest();
-        }
+        // if (!this.drawCooldown) {
+        //     this.makeClassifyRequest();
+        // }
     }
 
     onMouseMove({ nativeEvent }) {
@@ -157,9 +158,9 @@ class DrawingCanvas extends React.Component {
         this.paint = false;
         this.previous = null;
 
-        if (!this.drawCooldown) {
-            this.makeClassifyRequest();
-        }
+        // if (!this.drawCooldown) {
+        //     this.makeClassifyRequest();
+        // }
     }
 
     makeClassifyRequest() {
@@ -169,12 +170,22 @@ class DrawingCanvas extends React.Component {
         if (this.context) {
             this.props.fetchClassifyResults(this.context.getImageData(0, 0, this.CANVAS_HEIGHT, this.CANVAS_WIDTH));
         }
-        this.context = this.canvas.getContext('2d');
+        // this.context = this.canvas.getContext('2d');
 
         setTimeout(this.toggleDrawcoolDown, 2000);
     }
 
-    componentDidMount() {
+    onSubmitClick({ nativeEvent}) {
+
+        this.makeClassifyRequest();
+    }
+
+    onClearClick({ nativeEvent }) {
+
+        this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height); // Clears the canvas
+    }
+ 
+    componentSetup() {
         this.canvas.width = this.CANVAS_WIDTH;
         this.canvas.height = this.CANVAS_HEIGHT;
         this.context = this.canvas.getContext("2d");
@@ -183,18 +194,33 @@ class DrawingCanvas extends React.Component {
         this.rect = this.canvas.getBoundingClientRect();
     }
 
+    componentDidUpdate() {
+        this.componentSetup();
+    }
+
+    componentDidMount() {
+        this.componentSetup();
+    }
+
     render() {
         return (
-            <canvas 
-                className="CanvasComponent"
-                ref={(ref) => (this.canvas = ref)}
-                onMouseDown={this.onMouseDown}
-                onMouseLeave={this.onMouseLeave}
-                onMouseUp={this.onMouseUp}
-                onMouseMove={this.onMouseMove}
-                onTouchStart={this.onTouchStart} 
-                onTouchMove={this.onTouchMove}
-                onTouchEnd={this.onTouchEnd} />
+            <>
+            <div>
+                <canvas 
+                    className="CanvasComponent"
+                    id="drawingCanvas"
+                    ref={(ref) => (this.canvas = ref)}
+                    onMouseDown={this.onMouseDown}
+                    onMouseLeave={this.onMouseLeave}
+                    onMouseUp={this.onMouseUp}
+                    onMouseMove={this.onMouseMove}
+                    onTouchStart={this.onTouchStart} 
+                    onTouchMove={this.onTouchMove}
+                    onTouchEnd={this.onTouchEnd} />
+                <button onClick={this.onSubmitClick}>Submit</button>
+                <button onClick={this.onClearClick}>Clear</button>
+            </div>
+            </>
         );
     }
 }
