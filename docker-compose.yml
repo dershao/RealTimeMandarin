@@ -22,6 +22,6 @@ services:
     volumes:
       - ./rtd-ui:/usr/src/app
     ports: 
-      - "3000:3000"
+      - "3000:80"
     depends_on:
       - rtd-backend
