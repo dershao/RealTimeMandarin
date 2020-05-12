@@ -18,13 +18,16 @@ canvas {
 
 .Canvas {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
 
 .CanvasComponent {
-  margin-left: 5em;
 }
 
 #drawingCanvas {
   display: block;
+  margin: 0 auto;
 }
 

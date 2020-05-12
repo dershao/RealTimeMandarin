@@ -75,7 +75,6 @@ class DrawingCanvas extends React.Component {
          * Mouse begins drawing on canvas.
          * 
          */
-        console.log(this.context);
         var mouseX = nativeEvent.clientX - 1 - this.rect.left;
         var mouseY = nativeEvent.clientY - 1 - this.rect.top;
         
@@ -95,9 +94,6 @@ class DrawingCanvas extends React.Component {
         this.paint = false;
         this.previous = null;
 
-        // if (!this.drawCooldown) {
-        //     this.makeClassifyRequest();
-        // }
     }
 
     onMouseMove({ nativeEvent }) {
@@ -158,9 +154,6 @@ class DrawingCanvas extends React.Component {
         this.paint = false;
         this.previous = null;
 
-        // if (!this.drawCooldown) {
-        //     this.makeClassifyRequest();
-        // }
     }
 
     makeClassifyRequest() {
@@ -205,7 +198,7 @@ class DrawingCanvas extends React.Component {
     render() {
         return (
             <>
-            <div>
+            <div id="drawingCanvasContainer">
                 <canvas 
                     className="CanvasComponent"
                     id="drawingCanvas"
