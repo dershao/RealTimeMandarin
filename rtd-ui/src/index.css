@@ -16,14 +16,15 @@ canvas {
   border: 1px solid black;
 }
 
+#Title {
+  text-align: center;
+}
+
 .Canvas {
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
-}
-
-.CanvasComponent {
 }
 
 #drawingCanvas {

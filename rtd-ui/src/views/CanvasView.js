@@ -1,11 +1,12 @@
 import React from 'react';
 import axios from 'axios';
 
-import DrawingCanvas from './DrawingCanvas';
-import NNCanvas from './NNCanvas';
-import {NUM_CLASSES} from './constants';
+import DrawingCanvas from '../components/DrawingCanvas';
+import NNCanvas from '../components/NNCanvas';
+import TitleBar from '../components/TitleBar';
+import {NUM_CLASSES} from '../constants';
 
-class Canvas extends React.Component {
+class CanvasView extends React.Component {
     constructor(props) {
         super();
 
@@ -15,7 +16,7 @@ class Canvas extends React.Component {
         this.state = {
             prediction: null,
             character: randomCharacter
-        }
+        };
 
         this.fetchClassifyResults = this.fetchClassifyResults.bind(this);
     }
@@ -44,8 +45,9 @@ class Canvas extends React.Component {
     render() {
         return(
             <div className="Canvas">
+                <TitleBar />
                 <DrawingCanvas 
-                    character={this.state.randomCharacter}
+                    character={this.state.character}
                     fetchClassifyResults={this.fetchClassifyResults}
                 />
                 <NNCanvas prediction={this.state.prediction} />
@@ -57,4 +59,4 @@ class Canvas extends React.Component {
     }
 }
 
-export default Canvas;
+export default CanvasView;

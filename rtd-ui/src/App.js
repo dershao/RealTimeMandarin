@@ -1,12 +1,22 @@
-import React from 'react';
-import Canvas from './Canvas.js';
-import Title from './Title.js';
+import React , {useState} from 'react';
+import CanvasView from './views/CanvasView.js';
+import MainView from './views/MainView.js';
+import WordsView from './views/WordsView.js';
+import {views} from './constants.js';
 
 function App() {
+
+  const [view, setView] = useState(views.MAIN);
+
+  const setPageView = (view) => {
+    setView(view);
+  };
+
   return (
     <div className="App">
-      <Title />
-      <Canvas />
+      {view === views.CANVAS && <CanvasView setPageView={setPageView}/>}
+      {view === views.MAIN && <MainView setPageView={setPageView}/>}
+      {view === views.WORD && <WordsView setPageView={setPageView}/>}
     </div>
   );
 }
