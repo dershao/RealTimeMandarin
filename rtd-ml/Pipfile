@@ -7,8 +7,9 @@ verify_ssl = true
 
 [packages]
 flask = "*"
-tensorflow = "*"
 flask-cors = "*"
+opencv-python = "*"
+tensorflow = "==2.0"
 
 [requires]
 python_version = "3.5"

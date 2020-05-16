@@ -25,7 +25,7 @@ class CanvasView extends React.Component {
 
         axios({
             method: 'post',
-            url: 'http://localhost:8080/classify',
+            url: 'http://localhost:5000/classify',
             data: {
                 data: {
                     type: "image",
