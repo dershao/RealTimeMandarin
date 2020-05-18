@@ -1,0 +1,1 @@
+export const NUM_CLASSES = 6;
