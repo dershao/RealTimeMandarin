@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import config from './config';
 import api from './api';
 import db from './db';
@@ -11,6 +12,8 @@ db().catch((err) => {
 
 const app = express();
 const PORT = config.port;
+
+app.use(cors());
 
 app.use('/api', api());
 
