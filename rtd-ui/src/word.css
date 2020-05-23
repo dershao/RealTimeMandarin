@@ -1,0 +1,7 @@
+#character-card-wrapper {
+    text-align: center;
+}
+
+.character-card {
+    display: inline-block;
+}

@@ -2,8 +2,18 @@ import React from 'react';
 import {views} from '../constants.js';
 import '../main.css';
 import TitleBar from "../components/TitleBar";
+import axios from 'axios';
 
-function MainView({setPageView}) {
+function getCharacters() {
+    return axios({
+        method: 'get',
+        url: 'http://localhost:8080/api/characters'
+    }).then((res) => {
+        return res.data
+    });
+}
+
+function MainView({setPageView, setCharacters}) {
 
     return (
         <>
@@ -12,7 +22,13 @@ function MainView({setPageView}) {
                 <div id="description">Learn how to write mandarin characters with a neural network!</div>
                 <div id="button-wrapper">
                     <button id="start-button"
-                        onClick={() => {setPageView(views.WORD)}}>
+                        onClick={() => {
+                            getCharacters()
+                                .then((data) => {
+                                    setCharacters(data);
+                                    setPageView(views.WORD);
+                                });
+                        }}>
                         Teach me Mandarin
                     </button>
                 </div>

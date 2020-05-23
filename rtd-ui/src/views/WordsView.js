@@ -1,14 +1,26 @@
 import React from 'react';
 import TitleBar from '../components/TitleBar.js';
+import CharacterCard from '../components/CharacterCard.js';
 import {views} from '../constants.js';
+import '../word.css';
 
-function WordsView({setPageView}) {
+function WordsView({setPageView, characters}) {
 
     return (
         <>
             <div id="page-wrapper">
                 <TitleBar />
-                /* TODO: build an API that fetches 3 random characters and would be rendered here */
+                <div id="character-card-wrapper">
+                    {characters.map((char) => {
+                        return (
+                            <>
+                                <div class="character-card">
+                                    <CharacterCard charId={char.id} description={char.description}/>
+                                </div>
+                            </>
+                        );
+                    })}
+                </div>
                 <div id="button-wrapper">
                     <button id="start-button"
                             onClick={() => {setPageView(views.CANVAS)}}>

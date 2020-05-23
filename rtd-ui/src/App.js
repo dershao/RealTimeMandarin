@@ -7,6 +7,7 @@ import {views} from './constants.js';
 function App() {
 
   const [view, setView] = useState(views.MAIN);
+  const [characters, setCharacters] = useState([]);
 
   const setPageView = (view) => {
     setView(view);
@@ -14,9 +15,9 @@ function App() {
 
   return (
     <div className="App">
-      {view === views.CANVAS && <CanvasView setPageView={setPageView}/>}
-      {view === views.MAIN && <MainView setPageView={setPageView}/>}
-      {view === views.WORD && <WordsView setPageView={setPageView}/>}
+      {view === views.CANVAS && <CanvasView setPageView={setPageView} characters={characters}/>}
+      {view === views.MAIN && <MainView setPageView={setPageView} setCharacters={setCharacters}/>}
+      {view === views.WORD && <WordsView setPageView={setPageView} characters={characters}/>}
     </div>
   );
 }
