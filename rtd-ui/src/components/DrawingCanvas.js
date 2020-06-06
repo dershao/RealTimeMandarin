@@ -7,11 +7,7 @@ class DrawingCanvas extends React.Component {
 
     paint = false; // if we are currently painting (i.e. user clicked on canvas)
     previous = null; // previous coordinate
-    
-    // to prevent user from spamming draw and overwhelming server, set a global flag
-    // and timeout between each server request 
-    drawCooldown = false;
-    
+
     constructor(props) {
         super(props);
         this.onMouseDown = this.onMouseDown.bind(this);
@@ -21,7 +17,6 @@ class DrawingCanvas extends React.Component {
         this.onTouchStart= this.onTouchStart.bind(this); 
         this.onTouchMove= this.onTouchMove.bind(this);
         this.onTouchEnd= this.onTouchEnd.bind(this);
-        this.toggleDrawcoolDown = this.toggleDrawcoolDown.bind(this);
         this.onSubmitClick = this.onSubmitClick.bind(this);
         this.onClearClick = this.onClearClick.bind(this);    
     }
@@ -38,16 +33,8 @@ class DrawingCanvas extends React.Component {
          * @return Point object
          */
         return {pageX: x, pageY: y}
-    }
+    };
     
-    toggleDrawcoolDown = function() {
-        /**
-         * Helper function for toggling drawCooldown variable.
-         * 
-         */
-        this.context = this.canvas.getContext('2d');
-        this.drawCooldown = !this.drawCooldown;
-    }
 
     redraw = function(context, x, y) {
         /**
@@ -68,15 +55,15 @@ class DrawingCanvas extends React.Component {
         context.moveTo(this.previous.pageX, this.previous.pageY);
         context.lineTo(x, y);
         context.stroke();
-    }
+    };
 
     onMouseDown({ nativeEvent }) {
         /**
          * Mouse begins drawing on canvas.
          * 
          */
-        var mouseX = nativeEvent.clientX - 1 - this.rect.left;
-        var mouseY = nativeEvent.clientY - 1 - this.rect.top;
+        let mouseX = nativeEvent.clientX - 1 - this.rect.left;
+        let mouseY = nativeEvent.clientY - 1 - this.rect.top;
         
         if (!this.previous) {
             this.previous = this.Point(mouseX, mouseY)
@@ -123,8 +110,8 @@ class DrawingCanvas extends React.Component {
          * Touch leaves drawing canvas.
          * 
          */
-        var touchX = nativeEvent.targetTouches[0].clientX - 1 - this.rect.left;
-        var touchY = nativeEvent.targetTouches[0].clientY - 1 - this.rect.top;
+        let touchX = nativeEvent.targetTouches[0].clientX - 1 - this.rect.left;
+        let touchY = nativeEvent.targetTouches[0].clientY - 1 - this.rect.top;
         
         if (!this.previous) {
             this.previous = this.Point(touchX, touchY)
@@ -139,8 +126,8 @@ class DrawingCanvas extends React.Component {
          * 
          */
         if (this.paint) {
-            var touchX = nativeEvent.targetTouches[0].clientX - 1 - this.rect.left;
-            var touchY = nativeEvent.targetTouches[0].clientY - 1 - this.rect.top;
+            let touchX = nativeEvent.targetTouches[0].clientX - 1 - this.rect.left;
+            let touchY = nativeEvent.targetTouches[0].clientY - 1 - this.rect.top;
             this.redraw(this.context, touchX, touchY);
             this.previous = this.Point(touchX, touchY);
         }
@@ -157,15 +144,10 @@ class DrawingCanvas extends React.Component {
     }
 
     makeClassifyRequest() {
-
-        this.drawCooldown = true;
             
         if (this.context) {
             this.props.fetchClassifyResults(this.context.getImageData(0, 0, this.CANVAS_HEIGHT, this.CANVAS_WIDTH));
         }
-        // this.context = this.canvas.getContext('2d');
-
-        setTimeout(this.toggleDrawcoolDown, 2000);
     }
 
     onSubmitClick({ nativeEvent}) {

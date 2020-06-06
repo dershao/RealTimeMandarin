@@ -1,27 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 
 import DrawingCanvas from '../components/DrawingCanvas';
 import NNCanvas from '../components/NNCanvas';
-import TitleBar from '../components/TitleBar';
-import {NUM_CLASSES} from '../constants';
+import CanvasBar from '../components/CanvasBar';
+import Curtain from '../components/Curtain';
 
-class CanvasView extends React.Component {
-    constructor(props) {
-        super();
+function CanvasView({characters}) {
 
-        let randomCharacter = Math.floor(Math.random() * NUM_CLASSES);
-        console.log(`Random character ${randomCharacter}`);
+    const [prediction, setPrediction] = useState();
+    const [level, setLevel] = useState(0);
 
-        this.state = {
-            prediction: null,
-            character: randomCharacter
-        };
-
-        this.fetchClassifyResults = this.fetchClassifyResults.bind(this);
-    }
-
-    fetchClassifyResults(imgData) {
+    function fetchClassifyResults(imgData) {
 
         axios({
             method: 'post',
@@ -34,29 +24,51 @@ class CanvasView extends React.Component {
                         channels: 4
                     }
                 }
-            }  
+            }
         }).then((res) => {
-            this.setState({
-                prediction: res.data.data
-            });
+            setPrediction(res.data.data);
         });
     }
 
-    render() {
-        return(
-            <div className="Canvas">
-                <TitleBar />
-                <DrawingCanvas 
-                    character={this.state.character}
-                    fetchClassifyResults={this.fetchClassifyResults}
-                />
-                <NNCanvas prediction={this.state.prediction} />
-                {parseInt(this.state.prediction) === this.state.character &&
-                    <div>Correct</div>
-                }
-            </div>
-        );
+    function toggleCurtain() {
+        let curtainClassName = document.getElementById("curtain").className;
+        document.getElementById("curtain").className = curtainClassName === "curtain-panel" ? "curtain-panel visible" : "curtain-panel";
     }
+
+    function reset() {
+        toggleCurtain();
+        setPrediction();
+    }
+
+
+    let correctDiv;
+    if (level < 3 && parseInt(prediction) === characters[level].id) {
+        correctDiv = <div>Correct</div>;
+        setLevel(level + 1);
+    }
+
+    return(
+        <>
+            {level < 3 && <div className="Canvas">
+                <Curtain character={characters[level]}/>
+                <CanvasBar character={characters[level]} />
+                <DrawingCanvas
+                    character={characters[level]}
+                    fetchClassifyResults={fetchClassifyResults}
+                />
+                <NNCanvas prediction={prediction} />
+                {correctDiv}
+                {(()=> {
+                    if (correctDiv && level < 2) {
+                        setTimeout(() => {
+                            reset();
+                        }, 1000);
+                    }
+                })()}
+            </div>}
+            {level >= 3 && <div>nice you did it</div>}
+            </>
+    );
 }
 
 export default CanvasView;

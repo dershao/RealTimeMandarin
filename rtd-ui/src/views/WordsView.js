@@ -13,11 +13,7 @@ function WordsView({setPageView, characters}) {
                 <div id="character-card-wrapper">
                     {characters.map((char) => {
                         return (
-                            <>
-                                <div class="character-card">
-                                    <CharacterCard charId={char.id} description={char.description}/>
-                                </div>
-                            </>
+                            <CharacterCard key={char.id} charId={char.id} description={char.description}/>
                         );
                     })}
                 </div>

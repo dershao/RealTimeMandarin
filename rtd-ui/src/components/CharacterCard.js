@@ -4,8 +4,10 @@ function CharacterCard({charId, description}) {
 
     return (
       <>
-          <div class="card-description">{description}</div>
-          <img class="card-image" src={`/characters/${charId}.png`}/>
+          <div className="character-card">
+            <div className="card-description">{description}</div>
+            <img className="card-image" src={`/characters/${charId}.png`} alt={`Cannot find character with id: ${charId}`}/>
+          </div>
       </>
     );
 }
