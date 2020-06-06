@@ -1,5 +1,5 @@
 import React from 'react';
-import '../curtain.css';
+import '../css/curtain.css';
 
 function Curtain({character}) {
 
@@ -7,9 +7,12 @@ function Curtain({character}) {
         <>
             <div id="curtain-wrapper">
                 <div id="curtain" className="curtain-panel visible">
-                    <button id="button" onClick={() => {
-                        document.getElementById("curtain").className = "curtain-panel";
-                    }}>Let's go</button>
+                    <div className="curtain-card">
+                        <div className="curtain-text">Draw: {character.description}</div>
+                        <button id="button" className="curtain-button" onClick={() => {
+                            document.getElementById("curtain").className = "curtain-panel";
+                        }}>Let's go</button>
+                    </div>
                 </div>
             </div>
         </>

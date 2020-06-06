@@ -2,7 +2,7 @@ import React from 'react';
 import TitleBar from '../components/TitleBar.js';
 import CharacterCard from '../components/CharacterCard.js';
 import {views} from '../constants.js';
-import '../word.css';
+import '../css/word.css';
 
 function WordsView({setPageView, characters}) {
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import {views} from '../constants.js';
-import '../main.css';
+import '../css/main.css';
 import TitleBar from "../components/TitleBar";
 import axios from 'axios';
 
