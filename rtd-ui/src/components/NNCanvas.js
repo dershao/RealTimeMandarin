@@ -15,9 +15,11 @@ class NNCanvas extends React.Component {
         } 
 
         return (
-            <div className="CanvasComponent">
-                <h3>You are drawing:</h3>
-                {canvas}
+            <div className="NNCanvas">
+                <div className="CanvasComponent">
+                    <h3>You are drawing:</h3>
+                    {canvas}
+                </div>
             </div>
         );
     }

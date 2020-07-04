@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {NUM_CLASSES} from "../common/constants";
+import {DEFAULT_CHARS_PER_ROUND, NUM_CLASSES} from "../common/constants";
 
 const route = Router();
 import Character from '../models/Character.js';
@@ -40,7 +40,9 @@ export default (app) => {
 
     route.get('/', (req, res) => {
 
-        const nums = generateRandomNumbers(3);
+        const amount = req.query.amount || DEFAULT_CHARS_PER_ROUND;
+
+        const nums = generateRandomNumbers(parseInt(amount));
 
         getRandomCharacters(nums)
             .then((docs) => {

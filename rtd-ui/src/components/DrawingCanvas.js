@@ -180,7 +180,7 @@ class DrawingCanvas extends React.Component {
     render() {
         return (
             <>
-            <div id="drawingCanvasContainer">
+            <div className="DrawingCanvas">
                 <canvas 
                     className="CanvasComponent"
                     id="drawingCanvas"

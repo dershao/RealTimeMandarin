@@ -4,7 +4,7 @@ function CanvasBar({character}) {
 
     return (
         <>
-            <div>
+            <div className="CanvasBar">
                 <div id="drawingPrompt">Draw: {character.description}</div>
                 <div id="clock">
                     {/*TODO: implement a clock*/}

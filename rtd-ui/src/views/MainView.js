@@ -4,10 +4,10 @@ import '../css/main.css';
 import TitleBar from "../components/TitleBar";
 import axios from 'axios';
 
-function getCharacters() {
+function getCharacters(amount) {
     return axios({
         method: 'get',
-        url: 'http://localhost:8080/api/characters'
+        url: `http://localhost:8080/api/characters?amount=${amount}`
     }).then((res) => {
         return res.data
     });
@@ -23,7 +23,7 @@ function MainView({setPageView, setCharacters}) {
                 <div id="button-wrapper">
                     <button id="start-button"
                         onClick={() => {
-                            getCharacters()
+                            getCharacters(3)
                                 .then((data) => {
                                     setCharacters(data);
                                     setPageView(views.WORD);

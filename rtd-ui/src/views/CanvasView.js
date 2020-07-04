@@ -6,7 +6,10 @@ import NNCanvas from '../components/NNCanvas';
 import CanvasBar from '../components/CanvasBar';
 import Curtain from '../components/Curtain';
 
-function CanvasView({characters}) {
+import {views} from '../constants.js';
+import '../css/canvas.css';
+
+function CanvasView({setPageView, characters}) {
 
     const [prediction, setPrediction] = useState();
     const [level, setLevel] = useState(0);
@@ -66,7 +69,7 @@ function CanvasView({characters}) {
                     }
                 })()}
             </div>}
-            {level >= 3 && <div>nice you did it</div>}
+            {level >= 3 && setPageView(views.SUMMARY)}
             </>
     );
 }
