@@ -9,10 +9,11 @@ import Curtain from '../components/Curtain';
 import {views} from '../constants.js';
 import '../css/canvas.css';
 
-function CanvasView({setPageView, characters}) {
+function CanvasView({setPageView, characters, setCorrect}) {
 
     const [prediction, setPrediction] = useState();
     const [level, setLevel] = useState(0);
+    const [correct] = useState(new Array(3));
 
     function fetchClassifyResults(imgData) {
 
@@ -46,6 +47,8 @@ function CanvasView({setPageView, characters}) {
 
     let correctDiv;
     if (level < 3 && parseInt(prediction) === characters[level].id) {
+        correct[level] = true;
+        setCorrect(correct);
         correctDiv = <div>Correct</div>;
         setLevel(level + 1);
     }
