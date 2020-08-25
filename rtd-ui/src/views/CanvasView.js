@@ -5,6 +5,7 @@ import DrawingCanvas from '../components/DrawingCanvas';
 import NNCanvas from '../components/NNCanvas';
 import CanvasBar from '../components/CanvasBar';
 import Curtain from '../components/Curtain';
+import Timer from '../components/Timer';
 
 import {views} from '../constants.js';
 import '../css/canvas.css';
@@ -14,6 +15,7 @@ function CanvasView({setPageView, characters, setCorrect}) {
     const [prediction, setPrediction] = useState();
     const [level, setLevel] = useState(0);
     const [correct] = useState(new Array(3));
+    const [active, setActive] = useState(false);
 
     function fetchClassifyResults(imgData) {
 
@@ -34,16 +36,10 @@ function CanvasView({setPageView, characters, setCorrect}) {
         });
     }
 
-    function toggleCurtain() {
-        let curtainClassName = document.getElementById("curtain").className;
-        document.getElementById("curtain").className = curtainClassName === "curtain-panel" ? "curtain-panel visible" : "curtain-panel";
-    }
-
     function reset() {
-        toggleCurtain();
         setPrediction();
+        setActive(false);
     }
-
 
     let correctDiv;
     if (level < 3 && parseInt(prediction) === characters[level].id) {
@@ -56,7 +52,10 @@ function CanvasView({setPageView, characters, setCorrect}) {
     return(
         <>
             {level < 3 && <div className="Canvas">
-                <Curtain character={characters[level]}/>
+                <Curtain character={characters[level]}
+                         isActive={active}
+                         setActive={setActive}/>
+                <Timer isActive={active} level={level} setLevel={setLevel} reset={reset}/>
                 <CanvasBar character={characters[level]} />
                 <DrawingCanvas
                     character={characters[level]}
@@ -73,7 +72,7 @@ function CanvasView({setPageView, characters, setCorrect}) {
                 })()}
             </div>}
             {level >= 3 && setPageView(views.SUMMARY)}
-            </>
+        </>
     );
 }
 

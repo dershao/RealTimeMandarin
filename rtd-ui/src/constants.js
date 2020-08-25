@@ -5,3 +5,5 @@ export const views = {
     CANVAS: 2,
     SUMMARY: 3
 };
+
+export const TIME_LIMIT_SECONDS = 30;
