@@ -6,6 +6,6 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app.py ./
-COPY models/mnist-keras.h5 ./models/
+COPY models/characters-six-v1 ./models/
 
 CMD [ "python", "app.py" ]
