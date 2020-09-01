@@ -10,3 +10,24 @@
 #button-wrapper{
     text-align: center;
 }
+
+#page-wrapper {
+    margin-top: 70px;
+}
+
+.socials {
+    position: absolute;
+    top: 22px;
+    right: 50px;
+}
+
+#github-button {
+    height: 50px;
+    width: 47px;
+    display: block;
+    background: url("../images/github-logo.png") center no-repeat;
+    background-size: 40px 35px;
+    border: none;
+    text-decoration: none;
+    position: absolute;
+}

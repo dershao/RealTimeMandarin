@@ -32,6 +32,9 @@ function MainView({setPageView, setCharacters}) {
                         Teach me Mandarin
                     </button>
                 </div>
+                <div className="socials">
+                    <a id="github-button" href="https://www.github.com/dershao/RealTimeMandarin" />
+                </div>
             </div>
         </>
     );
